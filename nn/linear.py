@@ -48,7 +48,7 @@ class Linear(Module):
         [N, Fin] = self.cache["input"].shape
         # wGrad = np.einsum('no,ni->noi', gradients, self.cache["input"])
         # self.weight["grad"] = np.mean(wGrad, axis=0)
-        self.w["grad"] = np.dot(gradients.T, self.cache["inpiut"])
+        self.w["grad"] = np.dot(gradients.T, self.cache["input"])
         
         #computing the gradients wrt the bias
         # bGrad = np.dot(gradients, np.eye(gradients.shape[1]))
@@ -58,7 +58,7 @@ class Linear(Module):
         #computing the gradients wrt the input
         # inGrad = self.weight["val"]
         # return np.dot(gradients, inGrad)
-        dzdx = np.dot(gradients, self.weight["val"])
+        dzdx = np.dot(gradients, self.w["val"])
         return dzdx
     
     
