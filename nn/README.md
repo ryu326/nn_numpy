@@ -93,12 +93,12 @@ The correction factor $D$ is generally taken to be $\max(z_0, \dots, z_{F-1})$. 
 
 In the `backward` pass, the `Softmax` layer calculates the output derivative with respect to the input $\mathbf{z}$ as follows:  
 
-
+$$
 \begin{align*}
 \left( \frac{\partial \mathbf{a}}{\partial \mathbf{z}} \right)_{ij} &= \frac{\partial a_i}{\partial z_j} \quad \forall i,j \in \{ 0,\dots,F-1 \}\\
 \frac{\partial a_i}{\partial z_j} &= a_i(\delta_{ij} - a_j)
 \end{align*}
-
+$$
 
 where $\delta_{ij}$ is the Kroneker Delta defined as:
 
@@ -115,3 +115,32 @@ Since we need the output values for the output derivative computation in backwar
 <br><br>
 
 The `Softmax` layer has no trainable parameters.
+### Cross Entropy Loss
+The `CrossEntropyLoss` layer is used for implementing the Cross Entropy Loss function. This loss function is generally used in classification tasks with 2 or more classes as the output. In the `forward` pass, the `CrossEntropyLoss` layer computes the loss given the model output probability distribution $\mathbf{y}$ and the target class $T$. The Cross Entropy Loss function is computed as follows:
+
+$$ Loss = -\log y_T $$
+
+where $\mathbf{y}$ is a row vector of size $C$ and $T \in \{0, \dots, C-1\}$ with $C$ being the number of classes.
+
+**Note**: For a mini-batch, the loss values for each sample is computed and the average loss over all the samples is given as the output loss value.
+
+<br><br>
+
+In the `backward` pass, the `CrossEntropyLoss` layer calculates the loss gradient with respect to the model output distribution  $\mathbf{y}$ as follows:  
+
+$$
+\begin{align*}
+\left( \frac{\partial \text{Loss}}{\partial \mathbf{y}} \right)_i &= \frac{\partial \text{Loss}}{\partial y_i}\\
+\frac{\partial \text{Loss}}{\partial y_i} &= 
+\begin{cases} 
+  0 & i \neq T\\
+  -\frac{1}{y_T} & i = T
+  \end{cases}
+\end{align*}
+$$
+
+Since we need the model output probability of the target class i.e $y_T$ and the target class $T$ for computation of loss gradient in the backward pass, we store them during the forward pass in the `cache` variable and use them during the backward pass.
+
+<br><br>
+
+The `CrossEntropyLoss` layer has no trainable parameters.
