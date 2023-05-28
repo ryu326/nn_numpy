@@ -2,6 +2,17 @@ import numpy as np
 from .module import Module
 
 class Batchnorm(Module):
+    """
+    - x: Data of shape (N, D)
+    - gamma: Scale parameter of shape (D,)
+    - beta: Shift paremeter of shape (D,)
+    - mode: 'train' or 'test'; required
+    - eps: Constant for numeric stability
+    - momentum: Constant for running mean / variance.
+    - running_mean: Array of shape (D,) giving running mean of features
+    - running_var Array of shape (D,) giving running variance of features
+    """
+    
     def __init__(self, inFeatures, learningRate, eps = 1e-5, momentum = 0.9):
         super(Batchnorm, self).__init__()
         self.gamma = dict()
